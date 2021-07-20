@@ -41,5 +41,5 @@ def exibe_noticia_g1(request):
 
     return render(request, 'noticias_g1.html', {'conteudo': noticias_g1('https://g1.globo.com/')})
 
-
 # def noticias_r7():
+
