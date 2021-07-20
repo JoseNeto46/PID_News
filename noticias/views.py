@@ -34,4 +34,3 @@ def noticias_g1():
     print(news)
 
 
-def noticias_r7():
