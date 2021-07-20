@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h1>Noticias Globo
-        Noticias R7
-        Ofertas</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="d-flex h-100 p-5 bg-light border rounded-3 my-5">
+            <div class="m-5">
+                <h1>Noticias Globo</h1>
+                <p>Para ver as Noticias do G1, clique no botão abaixo</p>
+                <a class="btn btn-primary" href="{% url 'noticias_g1' %}">Ver Notícias</a>
+            </div>
+            <div class="m-5">
+                <h1>Noticias Record</h1>
+                <p>Para ver as Noticias da Record, clique no botão abaixo</p>
+                <a class="btn btn-primary" href="#">Ver Notícias</a>
+            </div>
+            <div class="m-5">
+                <h1>Ofertas</h1>
+                <p>Para ver as melhores ofertas, clique no botão abaixo</p>
+                <a class="btn btn-primary" href="#">Ver Ofertas</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
