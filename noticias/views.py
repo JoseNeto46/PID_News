@@ -4,10 +4,14 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 
-def noticias_g1():
+def index(request):
+    return render(request, 'index.html')
+
+
+def noticias_g1(link):
     lista_noticias = []
 
-    response = requests.get('https://g1.globo.com/')
+    response = requests.get(link)
 
     content = response.content
 
@@ -23,15 +27,19 @@ def noticias_g1():
 
         subtitulo = noticia.find('div', attrs={'class': 'feed-post-body-resumo'})
         print('Subtitulo :')
-        if (subtitulo):
+        if subtitulo:
             print(subtitulo.text)
             lista_noticias.append([titulo.text, subtitulo.text, titulo['href']])
         else:
             lista_noticias.append([titulo.text, '', titulo['href']])
 
     news = pd.DataFrame(lista_noticias, columns=['Título:', 'Subtítulo:', 'Link:'])
+    return lista_noticias
 
-    print(news)
+
+def exibe_noticia_g1(request):
+
+    return render(request, 'noticias_g1.html', {'conteudo': noticias_g1('https://g1.globo.com/')})
 
 
-def noticias_r7():
+# def noticias_r7():
