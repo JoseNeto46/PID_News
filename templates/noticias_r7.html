@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for noticia in conteudo %}
+        <div>
+            <p>Noticia {{ forloop.counter }}</p>
+            <p>Titulo: {{ noticia.0 }}</p>
+            <p>Subtitulo: {{ noticia.1 }}</p>
+            <p>Link: {{ noticia.2 }}</p>
+        </div>
+        <br>
+    {% endfor %}
+</body>
+</html>
