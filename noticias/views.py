@@ -71,4 +71,4 @@ def noticias_r7(link):
 
 
 def exibe_noticia_r7(request):
-    return render(request, 'noticias_r7.html', {'conteudo': noticias_g1('https://www.r7.com/')})
+    return render(request, 'noticias_yahoo.html', {'conteudo': noticias_g1('https://www.r7.com/')})
