@@ -1,18 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Noticias R7{% endblock %}
+{% block content %}
+
     {% for noticia in conteudo %}
-        <div>
-            <p>Noticia {{ forloop.counter }}</p>
-            <p>Titulo: {{ noticia.0 }}</p>
-            <p>Subtitulo: {{ noticia.1 }}</p>
-            <p>Link: {{ noticia.2 }}</p>
-        </div>
-        <br>
+        <div class="h-100 p-5 bg-light border rounded-3 my-5">
+        {% for noticia in conteudo %}
+            <div>
+                <p>Noticia {{ forloop.counter }}</p>
+                <p>Titulo: {{ noticia.0 }}</p>
+                {% if noticia.1 %}
+                    <p>Subtítulo: {{ noticia.1 }}</p>
+                {% endif %}
+                <p>Link: <a href="{{ noticia.2 }}" target="_blank">{{ noticia.2 }}</a></p>
+            </div>
+            <hr>
+            <br>
+
+        {% endfor %}
+    </div>
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}

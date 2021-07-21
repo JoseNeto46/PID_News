@@ -43,30 +43,31 @@ def exibe_noticia_g1(request):
 
 def noticias_r7(link):
     lista_noticias = []
-
     response = requests.get(link)
 
     content = response.content
 
     site = BeautifulSoup(content, 'html.parser')
 
-    noticias = site.findAll('div', attrs={'class': 'feed-post-body'})
+    noticias = site.findAll('div', attrs={'class': 'widget-8x1-e'})
 
     for noticia in noticias:
 
-        titulo = noticia.find('a', attrs={'class': 'feed-post-link'})
-        print('Titulo da noticia : \n', (titulo.text))
-        print(titulo['href'])  # Consigo pegar o link da noticia
+        # titulo
+        titulo = noticia.find('a', attrs={'class': 'r7-flex-hat__description'})
+        print(titulo['href'])
 
-        subtitulo = noticia.find('div', attrs={'class': 'feed-post-body-resumo'})
-        print('Subtitulo :')
+        # subtitulo
+        subtitulo = noticia.find('h3', attrs={'class': 'r7-flex-title-h5'})
+
         if subtitulo:
             print(subtitulo.text)
             lista_noticias.append([titulo.text, subtitulo.text, titulo['href']])
         else:
             lista_noticias.append([titulo.text, '', titulo['href']])
 
-    news = pd.DataFrame(lista_noticias, columns=['Título:', 'Subtítulo:', 'Link:'])
+    news = pd.DataFrame(lista_noticias, columns=['Titulo', 'Subtitulo', 'Link'])
+
     return lista_noticias
 
 
