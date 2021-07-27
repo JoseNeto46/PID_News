@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Noticias R7{% endblock %}
+{% block title %}Noticias BBC{% endblock %}
 {% block content %}
 
         <div class="h-100 p-5 bg-light border rounded-3 my-5">
@@ -10,7 +10,7 @@
                 {% if noticia.1 %}
                     <p>Subtítulo: {{ noticia.1 }}</p>
                 {% endif %}
-                <p>Link: <a href="{{ noticia.2 }}" target="_blank">{{ noticia.2 }}</a></p>
+                <p>Link: <a href="{{ noticia.2 }}" target="_blank">https://www.bbc.com{{ noticia.2 }}</a></p>
             </div>
             <hr>
             <br>

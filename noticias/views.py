@@ -41,7 +41,7 @@ def exibe_noticia_g1(request):
     return render(request, 'noticias_g1.html', {'conteudo': noticias_g1('https://g1.globo.com/')})
 
 
-def noticias_r7(link):
+def noticias_bbc(link):
     lista_noticias = []
     response = requests.get(link)
 
@@ -49,16 +49,16 @@ def noticias_r7(link):
 
     site = BeautifulSoup(content, 'html.parser')
 
-    noticias = site.findAll('div', attrs={'class': 'widget-8x1-e'})
+    noticias = site.findAll('ul', attrs={'class': 'e57qer20 bbc-10m7ymo eom0ln50'})
 
     for noticia in noticias:
 
         # titulo
-        titulo = noticia.find('a', attrs={'class': 'r7-flex-hat__description'})
+        titulo = noticia.find('a', attrs={'class': 'bbc-1fxtbkn evnt13t0'})
         print(titulo['href'])
 
         # subtitulo
-        subtitulo = noticia.find('h3', attrs={'class': 'r7-flex-title-h5'})
+        subtitulo = noticia.find('p', attrs={'class': 'bbc-166eyoy e1tfxkuo1'})
 
         if subtitulo:
             print(subtitulo.text)
@@ -71,5 +71,5 @@ def noticias_r7(link):
     return lista_noticias
 
 
-def exibe_noticia_r7(request):
-    return render(request, 'noticias_r7.html', {'conteudo': noticias_r7('https://www.r7.com/')})
+def exibe_noticia_bbc(request):
+    return render(request, 'noticias_bbc.html', {'conteudo': noticias_bbc('https://www.bbc.com/portuguese')})
