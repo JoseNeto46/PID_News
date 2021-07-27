@@ -56,6 +56,7 @@ def noticias_bbc(link):
         # titulo
         titulo = noticia.find('a', attrs={'class': 'bbc-1fxtbkn evnt13t0'})
         print(titulo['href'])
+        titulo['href'] = 'https://www.bbc.com' + titulo['href']
 
         # subtitulo
         subtitulo = noticia.find('p', attrs={'class': 'bbc-166eyoy e1tfxkuo1'})
