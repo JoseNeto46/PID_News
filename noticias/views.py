@@ -66,29 +66,32 @@ def exibe_noticia_bbc(request):
     return render(request, 'noticias_bbc.html', {'conteudo': noticias_bbc('https://www.bbc.com/portuguese')})
 
 
-def ofertas(link):
+def ofertas_ml(link):
+
+    
     lista_produtos = []
-    response = requests.get(link)
 
-    content = response.content
+    url_base = link
 
-    site = BeautifulSoup(content, 'html.parser')
+    produto_nome = input('Qual produto você deseja? ')
 
-    produtos = site.findAll('div', attrs={'class': 'a-row Grid-module__gridSection_1SEJTeTsU88s6aVeuuekAp'})
+    response = requests.get(url_base + produto_nome)
+
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('div', attrs={
+        'class': 'andes-card andes-card--flat andes-card--default ui-search-result ui-search-result--core andes-card--padding-default'})
 
     for produto in produtos:
+        titulo = produto.find('h2', attrs={'class': 'ui-search-item__title'})
 
-        nome = produto.find('div', attrs={'class': 'DealCard-module__truncate_3E_98PYsAQzbYk0BLscdkC'})
-        print(nome.text)
+        link = produto.find('a', attrs={'class': 'ui-search-link'})
 
-        preco = produto.find('span', attrs={'class': 'a-price-whole'})
-        print(preco.text)
-
-        lista_produtos.append([nome.text, preco.text])
-        print(lista_produtos)
+        real = produto.find('span', attrs={'class': 'price-tag-fraction'})
+        lista_produtos.append([titulo.text, real.text, link['href']])
 
     return lista_produtos
 
 
-def exibe_ofertas(request):
-    return render(request, 'ofertas.html', {'conteudo': ofertas('https://www.amazon.com.br/gp/goldbox/')})
+def exibe_ofertas_ml(request):
+    return render(request, 'ofertas.html', {'conteudo': ofertas_ml('https://lista.mercadolivre.com.br/')})
