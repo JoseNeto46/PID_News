@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
 {% block title %}Ofertas{% endblock %}
 {% block content %}
-
-    {% if busca %}
+    <br>
+    <form class="m-5" action="{% url 'ofertas' %}" method="post">
+        {% csrf_token %}
+        <select name="sites">
+            <option value="mercado_livre">Mercado Livre</option>
+            <option value="amazon">Amazon</option>
+        </select>
+        <hr>
+        <input class="form-control me-2" name="busca" type="search" placeholder="Digite o nome do produto do seu interesse">
         <br>
-        <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
-          {% csrf_token %}
-          <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto">
-          <button class="btn btn-outline-success" type="submit">Buscar</button>
-        </form>
-        <div class="h-100 p-5 bg-light border rounded-3 my-5">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+
+    </form>
+    {% if busca %}
+        <div class="h-100 p-5 bg-light border rounded-3 m-5">
+            <h3>Produtos do site {{ site }}</h3>
+            <h5>Resultado da pesquisa: {{ busca }}</h5>
+            <br>
             {% for produto in produtos %}
                 <div>
                     <p>Produto {{ forloop.counter }}</p>
@@ -22,12 +31,6 @@
             {% endfor %}
         </div>
     {% else %}
-        <br>
-        <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
-            {% csrf_token %}
-            <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto">
-            <button class="btn btn-outline-success" type="submit">Buscar</button>
-        </form>
     {% endif %}
 
 {% endblock %}
