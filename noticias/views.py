@@ -66,51 +66,112 @@ def exibe_noticia_bbc(request):
     return render(request, 'noticias_bbc.html', {'conteudo': noticias_bbc('https://www.bbc.com/portuguese')})
 
 
-# def ofertas_ml(link):
-# 
-# 
-#     lista_produtos = []
-# 
-#     url_base = link
-# 
-#     produto_nome = input('Qual produto você deseja? ')
-# 
-#     response = requests.get(url_base + produto_nome)
-# 
-#     site = BeautifulSoup(response.text, 'html.parser')
-# 
-#     produtos = site.findAll('div', attrs={
-#         'class': 'andes-card andes-card--flat andes-card--default ui-search-result ui-search-result--core andes-card--padding-default'})
-# 
-#     for produto in produtos:
-#         titulo = produto.find('h2', attrs={'class': 'ui-search-item__title'})
-# 
-#         link = produto.find('a', attrs={'class': 'ui-search-link'})
-# 
-#         real = produto.find('span', attrs={'class': 'price-tag-fraction'})
-#         lista_produtos.append([titulo.text, real.text, link['href']])
-# 
-#     return lista_produtos
-
-
-def exibe_ofertas_ml(request):
-    busca = None
+def ofertas_ml(busca=None):
     lista_produtos = []
-    url_base = ''
-    if request.POST.get('busca'):
-        url_base = 'https://lista.mercadolivre.com.br/'
-        busca = request.POST.get('busca')
-        response = requests.get(url_base + busca)
-        site = BeautifulSoup(response.text, 'html.parser')
-    
-        produtos = site.findAll('div', attrs={
-            'class': 'andes-card andes-card--flat andes-card--default ui-search-result ui-search-result--core andes-card--padding-default'})
-        for produto in produtos:
 
-            titulo = produto.find('h2', attrs={'class': 'ui-search-item__title'})
-    
-            link = produto.find('a', attrs={'class': 'ui-search-link'})
-    
-            real = produto.find('span', attrs={'class': 'price-tag-fraction'})
-            lista_produtos.append([titulo.text, real.text, link['href']])
-    return render(request, 'ofertas.html', {'produtos': lista_produtos, 'busca': busca})
+    url_base = 'https://lista.mercadolivre.com.br/'
+    response = requests.get(url_base + busca)
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('div', attrs={
+        'class': 'andes-card andes-card--flat andes-card--default ui-search-result ui-search-result--core andes-card--padding-default'})
+    for produto in produtos:
+        titulo = produto.find('h2', attrs={'class': 'ui-search-item__title'})
+
+        link = produto.find('a', attrs={'class': 'ui-search-link'})
+
+        real = produto.find('span', attrs={'class': 'price-tag-fraction'})
+        lista_produtos.append([titulo.text, real.text, link['href']])
+
+    return lista_produtos
+
+
+def ofertas_amazon(busca=None):
+    lista_produtos = []
+
+    url_base = 'https://www.amazon.com.br/s?k='
+    response = requests.get(url_base + busca + '&__mk_pt_BR=ÅMÅŽÕÑ&ref=nb_sb_noss_2')
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('div', attrs={
+        'class': 's-main-slot s-result-list s-search-results sg-row'})
+    for produto in produtos:
+        titulo = produto.find('span', attrs={'class': 'a-size-base-plus a-color-base a-text-normal'})
+
+        link = produto.find('a', attrs={'class': 'a-link-normal a-text-normal'})
+
+        real = produto.find('span', attrs={'class': 'a-offscreen'})
+        link['href'] = 'https://www.amazon.com.br' + link['href']
+        lista_produtos.append([titulo.text, real.text, link['href']])
+
+    return lista_produtos
+
+
+def ofertas_cc(busca=None):
+    lista_produtos = []
+
+    url_base = 'https://www.cec.com.br/busca?q='
+    response = requests.get(url_base + busca)
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('div', attrs={
+        'class': 'itemListElement'})
+    for produto in produtos:
+        titulo = produto.find('a', attrs={'class': 'name-and-brand'})
+
+        link = produto.find('a', attrs={'class': 'name-and-brand'})
+
+        real = produto.find('span', attrs={'class': 'value-full'})
+        link['href'] = 'https://www.cec.com.br' + link['href']
+        lista_produtos.append([titulo.text, real.text, link['href']])
+
+    return lista_produtos
+
+
+def ofertas_marisa(busca=None):
+    lista_produtos = []
+
+    url_base = 'https://pesquisa.marisa.com.br/busca?q='
+    response = requests.get(url_base + busca)
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('ul', attrs={
+        'class': 'vitrine neemu-products-container nm-view-type-grid'})
+    for produto in produtos:
+        titulo = produto.find('h4', attrs={'class': 'nm-product-name'})
+
+        link = produto.find('a', attrs={'class': 'nm-product-img-link'})
+
+        real = produto.find('span', attrs={'class': 'price-number'})
+        link['href'] = 'https://www.marisa.com.br' + link['href']
+        lista_produtos.append([titulo.text, real.text, link['href']])
+
+    return lista_produtos
+
+
+def exibe_ofertas(request):
+    busca = None
+    conteudo = None
+    site = ''
+    if request.POST.get('sites') == 'mercado_livre':
+        if request.POST.get('busca'):
+            busca = request.POST.get('busca')
+            conteudo = ofertas_ml(busca)
+            site = 'Mercado Livre'
+    elif request.POST.get('sites') == 'amazon':
+        if request.POST.get('busca'):
+            busca = request.POST.get('busca')
+            conteudo = ofertas_amazon(busca)
+            site = 'Amazon'
+    elif request.POST.get('sites') == 'cc':
+        if request.POST.get('busca'):
+            busca = request.POST.get('busca')
+            conteudo = ofertas_cc(busca)
+            site = 'C&C'
+    elif request.POST.get('sites') == 'marisa':
+        if request.POST.get('busca'):
+            busca = request.POST.get('busca')
+            conteudo = ofertas_marisa(busca)
+            site = 'Marisa'
+
+    return render(request, 'ofertas.html', {'produtos': conteudo, 'busca': busca, 'site': site})

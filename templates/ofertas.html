@@ -1,8 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Ofertas{% endblock %}
 {% block content %}
+    <br>
+    <form class="m-5" action="{% url 'ofertas' %}" method="post">
+        {% csrf_token %}
+        <select name="sites">
+            <option value="mercado_livre">Mercado Livre</option>
+            <option value="amazon">Amazon</option>
+            <option value="cc">C&C</option>
+            <option value="marisa">Marisa</option>
+        </select>
+        <hr>
+        <input class="form-control me-2" name="busca" type="search" placeholder="Digite o nome do produto do seu interesse">
+        <br>
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
 
+    </form>
     {% if busca %}
+<<<<<<< HEAD
         <br>
         <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
           {% csrf_token %}
@@ -20,14 +35,28 @@
                 <hr>
                 <br>
             {% endfor %}
+=======
+        <div class="h-100 p-5 bg-light border rounded-3 m-5">
+            <h3>Produtos do site {{ site }}</h3>
+            <h5>Resultado da pesquisa: {{ busca }}</h5>
+            <br>
+            {% if produtos %}
+                {% for produto in produtos %}
+                    <div>
+                        <p>Produto {{ forloop.counter }}</p>
+                        <p>Nome: {{ produto.0 }}</p>
+                        <p>Preço: R${{ produto.1 }}</p>
+                        <p>Link: <a href="{{ produto.2 }}" target="_blank">{{ produto.2 }}</a></p>
+                    </div>
+                    <hr>
+                    <br>
+                {% endfor %}
+            {% else %}
+                <p>Nenhum produto foi encontrado</p>
+            {% endif %}
+
+>>>>>>> ofertas
         </div>
-    {% else %}
-        <br>
-        <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
-            {% csrf_token %}
-            <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto">
-            <button class="btn btn-outline-success" type="submit">Buscar</button>
-        </form>
     {% endif %}
 
 {% endblock %}
