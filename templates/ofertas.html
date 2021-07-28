@@ -6,7 +6,7 @@
         <br>
         <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
           {% csrf_token %}
-          <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto">
+          <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto do Mercado Livre">
           <button class="btn btn-outline-success" type="submit">Buscar</button>
         </form>
         <div class="h-100 p-5 bg-light border rounded-3 my-5">
