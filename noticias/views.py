@@ -90,7 +90,7 @@ def ofertas_amazon(busca=None):
     lista_produtos = []
 
     url_base = 'https://www.amazon.com.br/s?k='
-    response = requests.get(url_base + busca + '&__mk_pt_BR=ÅMÅŽÕÑ&ref=nb_sb_noss')
+    response = requests.get(url_base + busca + '&__mk_pt_BR=ÅMÅŽÕÑ&ref=nb_sb_noss_2')
     site = BeautifulSoup(response.text, 'html.parser')
 
     produtos = site.findAll('div', attrs={
@@ -101,6 +101,7 @@ def ofertas_amazon(busca=None):
         link = produto.find('a', attrs={'class': 'a-link-normal a-text-normal'})
 
         real = produto.find('span', attrs={'class': 'a-offscreen'})
+        link['href'] = 'https://www.amazon.com.br' + link['href']
         lista_produtos.append([titulo.text, real.text, link['href']])
 
     return lista_produtos
