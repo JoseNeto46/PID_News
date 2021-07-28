@@ -128,6 +128,27 @@ def ofertas_cc(busca=None):
     return lista_produtos
 
 
+def ofertas_marisa(busca=None):
+    lista_produtos = []
+
+    url_base = 'https://pesquisa.marisa.com.br/busca?q='
+    response = requests.get(url_base + busca)
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('ul', attrs={
+        'class': 'vitrine neemu-products-container nm-view-type-grid'})
+    for produto in produtos:
+        titulo = produto.find('h4', attrs={'class': 'nm-product-name'})
+
+        link = produto.find('a', attrs={'class': 'nm-product-img-link'})
+
+        real = produto.find('span', attrs={'class': 'price-number'})
+        link['href'] = 'https://www.marisa.com.br' + link['href']
+        lista_produtos.append([titulo.text, real.text, link['href']])
+
+    return lista_produtos
+
+
 def exibe_ofertas(request):
     busca = None
     conteudo = None
@@ -147,5 +168,10 @@ def exibe_ofertas(request):
             busca = request.POST.get('busca')
             conteudo = ofertas_cc(busca)
             site = 'C&C'
+    elif request.POST.get('sites') == 'marisa':
+        if request.POST.get('busca'):
+            busca = request.POST.get('busca')
+            conteudo = ofertas_marisa(busca)
+            site = 'Marisa'
 
     return render(request, 'ofertas.html', {'produtos': conteudo, 'busca': busca, 'site': site})
