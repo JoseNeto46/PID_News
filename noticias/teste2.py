@@ -26,3 +26,4 @@ for produto in produtos:
     print('R$', real.text)
     print('\n\n')
 print(list_produtos)
+print(response.text)

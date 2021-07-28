@@ -2,17 +2,32 @@
 {% block title %}Ofertas{% endblock %}
 {% block content %}
 
+    {% if busca %}
+        <br>
+        <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
+          {% csrf_token %}
+          <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
         <div class="h-100 p-5 bg-light border rounded-3 my-5">
-        {% for produto in conteudo %}
-            <div>
-                <p>Produto {{ forloop.counter }}</p>
-                <p>Nome: {{ produto.0 }}</p>
-                <p>Preço: {{ produto.1 }}</p>
-                <p>Link: <a href="{{ produto.2 }}" target="_blank">{{ produto.2 }}</a></p>
-            </div>
-            <hr>
-            <br>
+            {% for produto in produtos %}
+                <div>
+                    <p>Produto {{ forloop.counter }}</p>
+                    <p>Nome: {{ produto.0 }}</p>
+                    <p>Preço: R${{ produto.1 }}</p>
+                    <p>Link: <a href="{{ produto.2 }}" target="_blank">{{ produto.2 }}</a></p>
+                </div>
+                <hr>
+                <br>
+            {% endfor %}
+        </div>
+    {% else %}
+        <br>
+        <form class="d-flex mx-5 my-5" action="{% url 'ofertas_ml' %}" method="post">
+            {% csrf_token %}
+            <input class="form-control me-2" name="busca" type="search" placeholder="Digite o produto">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+    {% endif %}
 
-        {% endfor %}
-    </div>
 {% endblock %}
