@@ -106,6 +106,27 @@ def ofertas_amazon(busca=None):
     return lista_produtos
 
 
+def ofertas_cc(busca=None):
+    lista_produtos = []
+
+    url_base = 'https://www.cec.com.br/busca?q='
+    response = requests.get(url_base + busca)
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.findAll('div', attrs={
+        'class': 'itemListElement'})
+    for produto in produtos:
+        titulo = produto.find('a', attrs={'class': 'name-and-brand'})
+
+        link = produto.find('a', attrs={'class': 'name-and-brand'})
+
+        real = produto.find('span', attrs={'class': 'value-full'})
+        link['href'] = 'https://www.cec.com.br' + link['href']
+        lista_produtos.append([titulo.text, real.text, link['href']])
+
+    return lista_produtos
+
+
 def exibe_ofertas(request):
     busca = None
     conteudo = None
@@ -120,5 +141,10 @@ def exibe_ofertas(request):
             busca = request.POST.get('busca')
             conteudo = ofertas_amazon(busca)
             site = 'Amazon'
+    elif request.POST.get('sites') == 'cc':
+        if request.POST.get('busca'):
+            busca = request.POST.get('busca')
+            conteudo = ofertas_cc(busca)
+            site = 'C&C'
 
     return render(request, 'ofertas.html', {'produtos': conteudo, 'busca': busca, 'site': site})
